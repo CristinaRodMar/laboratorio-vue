@@ -5,4 +5,5 @@ export type Recipe = {
     contenido: string
     position: number
     created: number
+    tipoComida?: string
 }

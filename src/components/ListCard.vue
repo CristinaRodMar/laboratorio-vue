@@ -6,7 +6,7 @@
 
     <div class="cards-wrapper">
         <CardMeal 
-            v-for="recipe in listStore.list" 
+            v-for="recipe in [...listStore.list].sort((a, b) => b.created - a.created)" 
             :key="recipe.id"
             :recipe="recipe"
             @update="(data) => listStore.updateRecipe(recipe.id, data)"

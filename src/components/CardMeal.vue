@@ -24,13 +24,25 @@
     </div>
 
     <div class="form-group">
+      <label for="tipoComida">Tipo de Comida</label>
+      <select id="tipoComida" v-model="localForm.tipoComida" class="select">
+        <option value="" disabled>Selecciona tipo</option>
+        <option value="desayuno">Desayuno</option>
+        <option value="almuerzo">Almuerzo</option>
+        <option value="comida">Comida</option>
+        <option value="merienda">Merienda</option>
+        <option value="cena">Cena</option>
+      </select>
+    </div>
+
+    <div class="form-group">
       <label for="contenido">Ingredientes / Preparación</label>
       <textarea id="contenido" v-model="localForm.contenido" rows="6" class="textarea"></textarea>
     </div>
 
     <button 
       class="btn-primary" 
-      :disabled="!localForm.titulo.trim() || !localForm.categoria"
+      :disabled="!localForm.titulo.trim() || !localForm.categoria || !localForm.tipoComida"
       @click="submitUpdate"
     >
       Guardar receta
@@ -51,12 +63,14 @@ const emit = defineEmits(['update', 'delete'])
 const localForm = reactive({
   titulo: props.recipe.titulo,
   categoria: props.recipe.categoria,
+  tipoComida: props.recipe.tipoComida || '', 
   contenido: props.recipe.contenido
 })
 
 watch(() => props.recipe, (newVal) => {
     localForm.titulo = newVal.titulo
     localForm.categoria = newVal.categoria
+    localForm.tipoComida = newVal.tipoComida || ''
     localForm.contenido = newVal.contenido
 }, { deep: true })
 
@@ -70,7 +84,7 @@ const submitUpdate = () => {
 .card {
   background: white;
   border-radius: 10px;
-  border: 1px solid var(--gray-200);
+  border: 1px solid #e5e7eb; 
   box-shadow: 0 3px 10px rgba(0,0,0,0.06);
   padding: 1.25rem 1.35rem;           
   transition: all 0.2s ease;
@@ -84,14 +98,14 @@ const submitUpdate = () => {
 .card:hover {
   transform: translateY(-4px);
   box-shadow: 0 10px 24px rgba(0,0,0,0.1);
-  border-color: var(--primary-light);
+  border-color: #a5b4fc; 
 }
 
 .card-title {
   margin: 0 3rem 1.1rem 0;
   font-size: 1.22rem;                 
   font-weight: 700;
-  color: var(--gray-900);
+  color: #111827; 
   line-height: 1.3;
 }
 
@@ -104,27 +118,26 @@ label {
   margin-bottom: 0.4rem;
   font-size: 0.9rem;
   font-weight: 600;
-  color: var(--gray-700);
+  color: #374151; 
 }
 
-.input,
-.select,
-.textarea {
+.input, .select, .textarea {
   width: 100%;
   padding: 0.62rem 0.95rem;            
-  border: 1px solid var(--gray-300);
+  border: 1px solid #d1d5db; 
   border-radius: 8px;
   font-size: 0.94rem;
-  background: var(--gray-50);
+  background: #f9fafb; 
   transition: all 0.18s ease;
   font-family: inherit;
+  box-sizing: border-box; 
 }
 
 .input:focus,
 .select:focus,
 .textarea:focus {
   outline: none;
-  border-color: var(--primary);
+  border-color: #6366f1; 
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
   background: white;
 }
@@ -136,16 +149,8 @@ label {
   line-height: 1.5;
 }
 
-.counter {
-  display: block;
-  text-align: right;
-  font-size: 0.78rem;
-  color: var(--gray-500);
-  margin-top: 0.25rem;
-}
-
 .btn-primary {
-  background: var(--primary);
+  background: #6366f1;
   color: white;
   border: none;
   padding: 0.75rem;
@@ -158,18 +163,17 @@ label {
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: var(--primary-dark);
+  background: #4f46e5; 
   transform: translateY(-1px);
   box-shadow: 0 5px 14px rgba(79, 70, 229, 0.26);
 }
 
 .btn-primary:disabled {
-  background: var(--gray-300);
-  color: var(--gray-500);
+  background: #d1d5db;
+  color: #9ca3af;
   cursor: not-allowed;
 }
 
-/* Botón eliminar */
 .btn-delete {
   position: absolute;
   top: 0.8rem;
@@ -187,15 +191,11 @@ label {
   align-items: center;
   justify-content: center;
   transition: all 0.18s ease;
+  z-index: 10;
 }
 
 .btn-delete:hover {
   background: #dc2626;
   transform: scale(1.08);
 }
-
-.btn-delete:active {
-  transform: scale(0.96);
-}
-
 </style>

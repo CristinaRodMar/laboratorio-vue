@@ -11,8 +11,8 @@ export const useListStore = defineStore('list', () => {
     }
 
     const createRecipe = (titulo = 'Untitled recipe') => {
-        const maxPosition = list.value.length > 0
-            ? Math.max(...list.value.map(r => r.position))
+        const minPosition = list.value.length > 0
+            ? Math.min(...list.value.map(r => r.position))
             : -1
 
         const newRecipe: Recipe = {
@@ -20,11 +20,11 @@ export const useListStore = defineStore('list', () => {
             titulo,
             categoria: '',
             contenido: '', 
-            position: maxPosition + 1,
+            position: minPosition - 1,
             created: Date.now()
         }
 
-        list.value.push(newRecipe)
+        list.value.unshift(newRecipe)
         saveToStorage(list.value) 
         return newRecipe   
     }
