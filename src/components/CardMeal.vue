@@ -1,0 +1,201 @@
+<template>
+  <div class="card">
+    <button class="btn-delete" @click="$emit('delete', recipe.id)" title="Eliminar">×</button>
+
+    <h2 class="card-title">{{ localForm.titulo || 'Nueva receta' }}</h2>
+    
+    <div class="form-group">
+      <label for="titulo">Título</label>
+      <input id="titulo" v-model="localForm.titulo" type="text" class="input" maxlength="80"/>
+    </div>
+
+    <div class="form-group">
+      <label for="categoria">Día</label>
+      <select id="categoria" v-model="localForm.categoria" class="select">
+        <option value="" disabled>Selecciona día</option>
+        <option value="lunes">Lunes</option>
+        <option value="martes">Martes</option>
+        <option value="miercoles">Miércoles</option>
+        <option value="jueves">Jueves</option>
+        <option value="viernes">Viernes</option>
+        <option value="sabado">Sábado</option>
+        <option value="domingo">Domingo</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="contenido">Ingredientes / Preparación</label>
+      <textarea id="contenido" v-model="localForm.contenido" rows="6" class="textarea"></textarea>
+    </div>
+
+    <button 
+      class="btn-primary" 
+      :disabled="!localForm.titulo.trim() || !localForm.categoria"
+      @click="submitUpdate"
+    >
+      Guardar receta
+    </button>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { reactive, watch } from 'vue'
+import type { Recipe } from '@/types'
+
+const props = defineProps<{
+  recipe: Recipe 
+}>()
+
+const emit = defineEmits(['update', 'delete'])
+
+const localForm = reactive({
+  titulo: props.recipe.titulo,
+  categoria: props.recipe.categoria,
+  contenido: props.recipe.contenido
+})
+
+watch(() => props.recipe, (newVal) => {
+    localForm.titulo = newVal.titulo
+    localForm.categoria = newVal.categoria
+    localForm.contenido = newVal.contenido
+}, { deep: true })
+
+const submitUpdate = () => {
+  emit('update', { ...localForm }) 
+  alert('¡Receta guardada localmente!')
+}
+</script>
+
+<style scoped>
+.card {
+  background: white;
+  border-radius: 10px;
+  border: 1px solid var(--gray-200);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+  padding: 1.25rem 1.35rem;           
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: 100%;
+  min-height: 340px;               
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.1);
+  border-color: var(--primary-light);
+}
+
+.card-title {
+  margin: 0 3rem 1.1rem 0;
+  font-size: 1.22rem;                 
+  font-weight: 700;
+  color: var(--gray-900);
+  line-height: 1.3;
+}
+
+.form-group {
+  margin-bottom: 1.15rem;             
+}
+
+label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--gray-700);
+}
+
+.input,
+.select,
+.textarea {
+  width: 100%;
+  padding: 0.62rem 0.95rem;            
+  border: 1px solid var(--gray-300);
+  border-radius: 8px;
+  font-size: 0.94rem;
+  background: var(--gray-50);
+  transition: all 0.18s ease;
+  font-family: inherit;
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+  background: white;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 96px;                    
+  max-height: 220px;
+  line-height: 1.5;
+}
+
+.counter {
+  display: block;
+  text-align: right;
+  font-size: 0.78rem;
+  color: var(--gray-500);
+  margin-top: 0.25rem;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.96rem;
+  cursor: pointer;
+  margin-top: 0.8rem;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(79, 70, 229, 0.26);
+}
+
+.btn-primary:disabled {
+  background: var(--gray-300);
+  color: var(--gray-500);
+  cursor: not-allowed;
+}
+
+/* Botón eliminar */
+.btn-delete {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.8rem;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  background: #ef4444;
+  color: white;
+  font-size: 1.3rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.18s ease;
+}
+
+.btn-delete:hover {
+  background: #dc2626;
+  transform: scale(1.08);
+}
+
+.btn-delete:active {
+  transform: scale(0.96);
+}
+
+</style>

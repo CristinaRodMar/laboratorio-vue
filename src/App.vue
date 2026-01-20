@@ -7,7 +7,7 @@ import { RouterView } from 'vue-router'
     <header class="navbar">
       <div class="container">
         <router-link to="/" class="brand">
-          <div class="brand">Meal Planner</div>
+          Meal Planner
         </router-link>
         <nav class="nav-links">
           <router-link to="/lista" class="nav-item">Lista de platos</router-link>
@@ -15,8 +15,9 @@ import { RouterView } from 'vue-router'
         </nav>
       </div>
     </header>
+
     <main class="main-content">
-      <router-view />
+      <RouterView />
     </main>
   </div>
 </template>
