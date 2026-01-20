@@ -1,3 +1,19 @@
+<script setup lang="ts">
+import { useListStore } from '@/stores/list'; 
+
+const listStore = useListStore(); 
+
+const diasSemana = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo'];
+const tiposComida = ['desayuno', 'almuerzo', 'comida', 'merienda', 'cena'];
+
+const getRecipes = (dia: string, tipo: string) => {
+    return listStore.list.filter(
+        (r) => r.categoria.toLowerCase() === dia.toLowerCase() && 
+            r.tipoComida?.toLowerCase() === tipo.toLowerCase()
+    );
+};
+</script>
+
 <template>
     <div class="calendar-container">
         <div class="calendar-grid">
@@ -21,22 +37,6 @@
         </div>
     </div>
 </template>
-
-<script setup lang="ts">
-import { useListStore } from '@/stores/list'; 
-
-const listStore = useListStore(); 
-
-const diasSemana = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo'];
-const tiposComida = ['desayuno', 'almuerzo', 'comida', 'merienda', 'cena'];
-
-const getRecipes = (dia: string, tipo: string) => {
-    return listStore.list.filter(
-        (r) => r.categoria.toLowerCase() === dia.toLowerCase() && 
-            r.tipoComida?.toLowerCase() === tipo.toLowerCase()
-    );
-};
-</script>
 
 <style scoped>
 .calendar-container {
@@ -111,10 +111,23 @@ const getRecipes = (dia: string, tipo: string) => {
 
 @media (max-width: 1024px) {
     .calendar-container {
-        padding: 1rem;
+        padding: 0.5rem; 
     }
     .calendar-grid {
-        grid-template-columns: 100px repeat(7, 180px); 
+        grid-template-columns: 80px repeat(7, 160px); 
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch; 
+    }
+}
+
+@media (max-width: 640px) {
+    .grid-header, .type-label {
+        padding: 0.5rem;
+        font-size: 0.75rem;
+    }
+    
+    .calendar-cell {
+        min-height: 70px;
     }
 }
 </style>

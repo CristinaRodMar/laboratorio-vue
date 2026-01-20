@@ -1,9 +1,9 @@
-export type Recipe = {
-    id: string
-    titulo: string
-    categoria: string 
-    contenido: string
-    position: number
-    created: number
-    tipoComida?: string
+export interface Recipe {
+    id: string;
+    titulo: string;
+    categoria: string;
+    tipoComida?: string;
+    contenido: string;
+    position: number;
+    created: number;
 }
